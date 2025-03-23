@@ -36,7 +36,7 @@ struct ContentView: View {
                     .bold()
                     .multilineTextAlignment(.center)
                 
-                Text("Hollow Box tic")
+                Text("Hollow Box tic sound")
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
