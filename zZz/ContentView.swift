@@ -9,19 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var bpmCount: Int = 60
+    @State private var isPlaying: Bool = false
+    @StateObject private var soundPlayer = SoundPlayer()
     
     var body: some View {
         VStack(spacing: 20) {
             Spacer()
             
             ZStack(alignment: .center, content: {
-                Image("")
+                Image(systemName: "sleep")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 300, height: 300)
                     .cornerRadius(10)
                     .background(Color.gray)
-                Text("\(50)")
+                    .opacity(0.0) // TODO: - Fix me.
+                Text("\(bpmCount)")
                     .font(.system(size: 100))
                     .bold()
                     .lineLimit(1)
@@ -43,7 +47,7 @@ struct ContentView: View {
             
             HStack(spacing: 40) {
                 Button(action: {
-                    minusTapped()
+                    bpmCount -= 1
                 }) {
                     Image(systemName: "minus")
                         .font(.largeTitle)
@@ -51,14 +55,15 @@ struct ContentView: View {
                 .padding()
                 
                 Button(action: {
-                    togglePlayPause()
+                    isPlaying ? soundPlayer.stopSound() : soundPlayer.playSound(bpm: bpmCount)
+                    isPlaying.toggle()
                 }) {
-                    Image(systemName: "play.fill")
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                         .font(.largeTitle)
                 }
                 .padding()
                 Button(action: {
-                    plusTapped()
+                    bpmCount += 1
                 }) {
                     Image(systemName: "plus")
                         .font(.largeTitle)
@@ -90,18 +95,7 @@ struct ContentView: View {
 extension ContentView {
     func optionsTapped() {
         print("Todo, make an action sheet for the sound options enum.")
-    }
-    
-    func togglePlayPause() {
-        // Toggle image then call player to play.
-    }
-    
-    func plusTapped() {
-        
-    }
-    
-    func minusTapped() {
-        
+        // Use confirmationDialog instead of deprecated actionSheet.
     }
 }
 
