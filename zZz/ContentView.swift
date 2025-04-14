@@ -12,6 +12,10 @@ struct ContentView: View {
     @State private var bpmCount: Int = 60
     @State private var isPlaying: Bool = false
     @StateObject private var soundPlayer = SoundPlayer()
+    @State private var showPicker = false
+    @State private var selectedSound: SoundForPath = SoundForPath.alarmTic // Default value for now.
+    
+    let options = ["iPhone", "MacBook", "iPad", "AirPods"]
     
     var body: some View {
         VStack(spacing: 20) {
@@ -40,7 +44,7 @@ struct ContentView: View {
                     .bold()
                     .multilineTextAlignment(.center)
                 
-                Text("Hollow Box tic sound")
+                Text(selectedSound.displayName)
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -55,7 +59,7 @@ struct ContentView: View {
                 .padding()
                 
                 Button(action: {
-                    isPlaying ? soundPlayer.stopSound() : soundPlayer.playSound(bpm: bpmCount)
+                    isPlaying ? soundPlayer.stopSound() : soundPlayer.playSound(bpm: bpmCount, forSound: .alarmTic)
                     isPlaying.toggle()
                 }) {
                     Image(systemName: isPlaying ? "pause.fill" : "play.fill")
@@ -81,6 +85,14 @@ struct ContentView: View {
                     .onTapGesture {
                          optionsTapped()
                     }
+                    .confirmationDialog("Choose a sound", isPresented: $showPicker, titleVisibility: .visible) {
+                        ForEach(SoundForPath.allCases) { sound in
+                            Button(sound.displayName) {
+                                selectedSound = sound
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    }
             }
             .padding()
             .font(.footnote)
@@ -94,8 +106,7 @@ struct ContentView: View {
 // MARK: - ButtonActions
 extension ContentView {
     func optionsTapped() {
-        print("Todo, make an action sheet for the sound options enum.")
-        // Use confirmationDialog instead of deprecated actionSheet.
+        showPicker = true
     }
 }
 

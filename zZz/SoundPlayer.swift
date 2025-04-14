@@ -11,11 +11,11 @@ class SoundPlayer: ObservableObject {
     var audioPlayer: AVAudioPlayer?
     var timer: Timer?
     
-    func playSound(bpm: Int) {
+    func playSound(bpm: Int, forSound: SoundForPath) {
         let interval = 60.0 / Double(bpm) // Time per beat
-        
+        print(forSound)
         // Load sound
-        if let soundURL = Bundle.main.url(forResource: "Metronome1", withExtension: "wav") {
+        if let soundURL = Bundle.main.url(forResource: forSound.rawValue, withExtension: "wav") {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
                 audioPlayer?.prepareToPlay()
