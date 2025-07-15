@@ -31,6 +31,7 @@ struct ContentView: View {
                     .lineLimit(1)
                     .padding(.all, 10)
             })
+            .background(Color.gray).opacity(0.20)
             Spacer()
 
             
